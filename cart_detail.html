@@ -1,0 +1,21 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <h1>Your Cart</h1>
+    {% for item in cart_items %}
+        <div class="cart-item">
+            {{ item.0.name }} - Quantity: {{ item.1 }} - Subtotal: ${{ item.0.price|floatformat:2|multiply:item.1 }}
+            <form action="{% url 'cart_remove' item.0.id %}" method="post" onsubmit="return confirmRemove();">
+                {% csrf_token %}
+                <button type="submit">Remove</button>
+            </form>
+        </div>
+    {% endfor %}
+    <h2>Total: ${{ total }}</h2>
+    <form action="{% url 'checkout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Checkout</button>
+    </form>
+{% endblock %}
